@@ -20,7 +20,9 @@ Important: In order to use this library, you have to...
 2) Please refer to the example for usage: [Quick-Link](https://github.com/Rodiii/flutter_firebase_picture_uploader/blob/master/example/lib/main.dart)
 
 ### Example
-![Example](https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example_screenshot.png)
+Link to example video: https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example.gif
+
+<img src="https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example_screenshot.png" width="300">
 
 ## Bugs/Requests
 If you encounter any problems feel free to open an issue. If you feel the library is
