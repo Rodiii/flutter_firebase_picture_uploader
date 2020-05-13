@@ -315,7 +315,7 @@ class _SingleProfilePictureUploadWidgetState
     try {
       // in case of custom upload function, use it
       if (widget.settings.customUploadFunction != null) {
-        _uploadJob.storageReference =
+        _uploadJob.storageReference = await
             widget.settings.customUploadFunction(imageCropped, _uploadJob.id);
       } else {
         // else use default one
@@ -512,7 +512,10 @@ class UploadJob {
         _storageReference.path != null &&
         _storageReference.path != '') {
       final String fileName = _storageReference.path.split('/').last;
-      final String id = fileName.split('_')[0];
+
+      // The filename mist be like custom1_..._custom_x_id_customy.(jpg|png|...)
+      final List<String> fileParts = fileName.split('_');
+      final String id = fileParts[fileParts.length-2];
       this.id = int.parse(id);
     }
   }
