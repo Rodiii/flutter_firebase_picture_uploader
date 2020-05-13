@@ -9,9 +9,15 @@ With this library the following is possible:
 - Multiple customization options (font size, text, color, etc.)
 - Custom upload or download methods possible
 
-## Quick Usage
 
-Please refer to the example for usage: [Quick-Link](https://github.com/Rodiii/flutter_firebase_picture_uploader/blob/master/example/lib/main.dart)
+## Prerequisites
+Important: In order to use this library, you have to...
+1) Add Firebase to your project, e.g. for iOS copy your GoogleService-Info.plist into ios/Runner/
+2) Configure image_picker for iOS, see https://pub.dev/packages/image_picker.
+
+## Quick Usage
+1) Apply the prerequisites mentioned above to your project
+2) Please refer to the example for usage: [Quick-Link](https://github.com/Rodiii/flutter_firebase_picture_uploader/blob/master/example/lib/main.dart)
 
 ### Example
 ![Example](https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example_screenshot.png)
