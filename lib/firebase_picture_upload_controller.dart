@@ -75,9 +75,9 @@ class FirebasePictureUploadController {
         imgRef.putFile(image, new StorageMetadata(contentType: 'image/jpg'));
 
     // wait until upload is complete
-    StorageTaskSnapshot snapShot = await uploadTask.onComplete;
+    final StorageTaskSnapshot snapShot = await uploadTask.onComplete;
     if (snapShot.error != null)
-      throw Exception("Upload failed, Firebase Error Code: ${snapShot.error}");
+      throw Exception('Upload failed, Firebase Error Code: ${snapShot.error}');
 
     return imgRef;
   }

@@ -271,11 +271,18 @@ class _SingleProfilePictureUploadWidgetState
     _uploadJob.action = UploadAction.actionUpload;
 
     // manipulate image as requested
-    final image = await ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: widget.settings.imageManipulationSettings.compressQuality);
-    if (image == null) return;
+    final image = await ImagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality:
+            widget.settings.imageManipulationSettings.compressQuality);
+    if (image == null) {
+      return;
+    }
     final imageCropped = await PictureUploadWidget.pictureUploadController
         .cropImage(image, widget.settings.imageManipulationSettings);
-    if (imageCropped == null) return;
+    if (imageCropped == null) {
+      return;
+    }
 
     // update display state
     setState(() {
