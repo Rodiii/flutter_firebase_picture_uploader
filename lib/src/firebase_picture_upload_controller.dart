@@ -1,5 +1,3 @@
-library firebase_picture_uploader;
-
 import 'dart:async';
 import 'dart:io';
 
