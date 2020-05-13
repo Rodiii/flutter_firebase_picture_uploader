@@ -16,8 +16,12 @@ Important: In order to use this library, you have to...
 2) Configure image_picker for iOS, see https://pub.dev/packages/image_picker.
 
 ## Quick Usage
+A complete tutorial how to use `PictureUploadWidget` can be found here: [Tutorial](https://rothech.com/flutter-firebase-picture-uploader)
+
+Summary:
 1) Apply the prerequisites mentioned above to your project
 2) Please refer to the example for usage: [Quick-Link](https://github.com/Rodiii/flutter_firebase_picture_uploader/blob/master/example/lib/main.dart)
+
 
 ### Example
 Link to example video: https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example.gif

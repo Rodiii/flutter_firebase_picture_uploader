@@ -20,13 +20,20 @@ class PictureUploadSettings {
       this.maxImageCount = 5,
       this.imageManipulationSettings = const ImageManipulationSettings()});
 
+  /// the directory where you want to upload to
   final String uploadDirectory;
+  /// the function which shall be called to upload the image, if you don't want to use the default one
   final Function customUploadFunction;
-  final Function customDeleteFunction;
+  /// the function which shall be called to delete the image, if you don't want to use the default one
+  final Function customDeleteFunction;  
+  /// the function which shall be called if an error occurs
   final Function onErrorFunction;
+  /// the minimum images which shall be uploaded (controls the delete button)
   final int minImageCount;
+  /// the maximum images which can be uploaded
   final int maxImageCount;
-
+ 
+  /// the settings how the image shall be modified before upload
   final ImageManipulationSettings imageManipulationSettings;
 }
 
@@ -36,9 +43,14 @@ class ImageManipulationSettings {
       this.maxWidth = 800,
       this.maxHeight = 800,
       this.compressQuality = 75});
+      
+  /// the requested aspect ratio for the image
   final CropAspectRatio aspectRatio;
+  /// the requested maxWidth of the image
   final int maxWidth;
+  /// the requested maxHeight of the image
   final int maxHeight;
+  /// the requested compressQuality of the image [0..100]
   final int compressQuality;
 }
 
@@ -51,10 +63,15 @@ class PictureUploadButtonStyle {
     this.fontSize = 14.0,
   });
 
+  /// the icon which shall be displayed within the upload button
   final IconData iconData;
+  /// the icon size of the icon
   final double iconSize;
+  /// the background color of the upload button
   final Color backgroundColor;
+  /// the font color of the text within the upload button
   final Color fontColor;
+  /// the font size of the text within the upload button
   final double fontSize;
 }
 
@@ -67,12 +84,18 @@ class PictureUploadWidget extends StatefulWidget {
       this.buttonStyle = const PictureUploadButtonStyle(),
       this.enabled = true});
 
-  final Function onPicturesChange;
-  final List<UploadJob> initialImages;
+  /// function is called after an image is uploaded, the the UploadJob as parameter
+  final Function onPicturesChange; 
+  /// the images which shall be displayed initiall
+  final List<UploadJob> initialImages; 
+  /// the text displayed within the upload button
   final String buttonText;
+  /// if false, the widget won't react if clicked
   final bool enabled;
-
+ 
+  /// all configuration settings for the upload
   final PictureUploadSettings settings;
+  /// all ui customization settings for the upload button
   final PictureUploadButtonStyle buttonStyle;
 
   static final FirebasePictureUploadController pictureUploadController =
