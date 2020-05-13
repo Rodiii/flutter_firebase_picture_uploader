@@ -1,0 +1,17 @@
+name: example
+description: Flutter Cupertino Birthday Textbox Example
+version: 1.0.1
+
+dependencies:
+  firebase_picture_uploader:
+    path: ../
+
+  flutter: 
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
