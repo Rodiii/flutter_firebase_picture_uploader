@@ -1,3 +1,9 @@
+## 1.1.0
+  * Feature: Add option to select image from gallery and/or camera
+  * Feature: Add customization options (width and height) for PictureUploadButton
+  * Fix: Fixed an issue with minImageCount / maxImageCount that minImageCount = 0 wasn't possible
+  * Fix: Decreased image dependecy to ^2.1.4
+
 ## 1.0.0+6
   * Fixed a bug in image url caching which caused to return null if not cached instead of receiving the image url from firebase.
 

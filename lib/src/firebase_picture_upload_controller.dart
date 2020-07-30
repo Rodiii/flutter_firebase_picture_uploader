@@ -21,8 +21,9 @@ class FirebasePictureUploadController {
       try {
         persistentKeyValueStore ??= await SharedPreferences.getInstance();
         final String cachedURL = persistentKeyValueStore.getString(storageURL);
-        if (cachedURL != null)
+        if (cachedURL != null) {
           return cachedURL;
+        }
       } on Exception catch (error, stackTrace) {
         print(error);
         print(stackTrace);
@@ -43,9 +44,9 @@ class FirebasePictureUploadController {
 
       // give url to caller
       return downloadLink;
-    } on Exception catch (error, stackTrace) {
+    } on Exception catch (error) {
       print(error);
-      print(stackTrace);
+      // print(stackTrace);
     }
     return null;
   }
@@ -66,7 +67,7 @@ class FirebasePictureUploadController {
       String uploadDirectory,
       int id,
       Function imagePostProcessingFuction) async {
-    final String uploadPath = uploadDirectory + id.toString() + '_800.jpg';
+    final String uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
     final StorageReference imgRef =
         FirebaseStorage.instance.ref().child(uploadPath);
 

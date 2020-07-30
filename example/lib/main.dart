@@ -37,12 +37,19 @@ class _MyHomeState extends State<MyHome> {
           const Padding(
             padding: EdgeInsets.only(bottom: 5.0),
           ),
-          new PictureUploadWidget(
-            onPicturesChange: profilePictureCallback,
+          PictureUploadWidget(
             initialImages: _profilePictures,
-            settings: PictureUploadSettings(onErrorFunction: onErrorCallback),
+            onPicturesChange: profilePictureCallback,
             buttonStyle: const PictureUploadButtonStyle(),
             buttonText: 'Upload Picture',
+            settings: const PictureUploadSettings(
+                // customDeleteFunction: ProfileController.deleteProfilePicture,
+                // customUploadFunction: RecipeController.uploadRecipePicture,
+                imageSource: ImageSourceExtended.askUser,
+                minImageCount: 0,
+                maxImageCount: 5,
+                imageManipulationSettings:
+                    const ImageManipulationSettings(compressQuality: 75)),
             enabled: true,
           ),
         ],

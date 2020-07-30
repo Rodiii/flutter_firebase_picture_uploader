@@ -1,6 +1,8 @@
 
 # Flutter Firebase Picture Uploader
 
+<img src="https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example_screenshot.png" width="300">
+
 This library offers a Picture Upload widget which can be used to upload one or multiple images to your Firebase Storage.
 
 With this library the following is possible:
@@ -25,8 +27,6 @@ Summary:
 
 ### Example
 Link to example video: https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example.gif
-
-<img src="https://github.com/Rodiii/flutter_firebase_picture_uploader/raw/master/example_screenshot.png" width="300">
 
 ## Bugs/Requests
 If you encounter any problems feel free to open an issue. If you feel the library is
