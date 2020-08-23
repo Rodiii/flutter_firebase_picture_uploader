@@ -1,3 +1,6 @@
+## 1.1.1
+  * Feature: Close icon color (and background) can be configured
+
 ## 1.1.0
   * Feature: Add option to select image from gallery and/or camera
   * Feature: Add customization options (width and height) for PictureUploadButton

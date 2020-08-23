@@ -105,6 +105,8 @@ class PictureUploadButtonStyle {
     this.height = 100,
     this.fontColor = CupertinoColors.white,
     this.fontSize = 14.0,
+    this.closeIconColor = CupertinoColors.systemBlue,
+    this.closeIconBackgroundColor = CupertinoColors.lightBackgroundGray,
   });
 
   /// The icon which shall be displayed within the upload button
@@ -127,6 +129,12 @@ class PictureUploadButtonStyle {
 
   /// The font size of the text within the upload button
   final double fontSize;
+
+  /// The color of the close icon
+  final Color closeIconColor;
+
+  /// The background color of the close icon box
+  final Color closeIconBackgroundColor;
 }
 
 class PictureUploadWidget extends StatefulWidget {
@@ -582,12 +590,16 @@ class _SingleProfilePictureUploadWidgetState
                   shape: BoxShape.circle,
                   color: Colors.white,
                   border: Border.all(
-                      color: CupertinoColors.lightBackgroundGray, width: 1.0),
+                      color: widget.pictureUploadWidget.buttonStyle
+                          .closeIconBackgroundColor,
+                      width: 1.0),
                 ),
                 height: 28.0, // height of the button
                 width: 28.0, // width of the button
-                child: const Icon(Icons.close,
-                    color: CupertinoColors.systemBlue, size: 17.0),
+                child: Icon(Icons.close,
+                    color:
+                        widget.pictureUploadWidget.buttonStyle.closeIconColor,
+                    size: 17.0),
               ),
             ),
           ],
