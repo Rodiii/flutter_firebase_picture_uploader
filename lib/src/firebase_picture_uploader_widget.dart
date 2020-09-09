@@ -356,7 +356,7 @@ class _SingleProfilePictureUploadWidgetState
     if (_uploadJob.image == null && _uploadJob.storageReference != null) {
       _uploadJob.uploadProcessing = true;
       PictureUploadWidget.pictureUploadController
-          .receiveURL(_uploadJob.storageReference.path)
+          .receiveURL(_uploadJob.storageReference.fullPath)
           .then(onProfileImageURLReceived);
     }
   }
@@ -610,7 +610,9 @@ class _SingleProfilePictureUploadWidgetState
         existingImageWidget,
         _uploadJob.uploadProcessing
             ? processingIndicator
-            : widget.enableDelete ? deleteButton : Container(),
+            : widget.enableDelete
+                ? deleteButton
+                : Container(),
       ],
     );
   }
@@ -639,17 +641,17 @@ class UploadJob {
   bool uploadProcessing = false;
   File image;
   File oldImage;
-  StorageReference oldStorageReference;
+  Reference oldStorageReference;
   ImageProvider imageProvider; // for existing images
 
-  StorageReference _storageReference;
-  StorageReference get storageReference => _storageReference;
-  set storageReference(StorageReference storageReference) {
+  Reference _storageReference;
+  Reference get storageReference => _storageReference;
+  set storageReference(Reference storageReference) {
     _storageReference = storageReference;
     if (_storageReference != null &&
-        _storageReference.path != null &&
-        _storageReference.path != '') {
-      final String fileName = _storageReference.path.split('/').last;
+        _storageReference.fullPath != null &&
+        _storageReference.fullPath != '') {
+      final String fileName = _storageReference.fullPath.split('/').last;
 
       // The filename mist be like custom1_..._custom_x_id_customy.(jpg|png|...)
       final List<String> fileParts = fileName.split('_');
@@ -660,7 +662,7 @@ class UploadJob {
 
   bool compareTo(UploadJob other) {
     if (storageReference != null && other.storageReference != null)
-      return storageReference.path == other.storageReference.path;
+      return storageReference.fullPath == other.storageReference.fullPath;
     else if (image != null && other.image != null)
       return image.path == other.image.path;
     else

@@ -1,8 +1,15 @@
 import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(ExampleApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
+  runApp(ExampleApp());
+}
 
 class ExampleApp extends StatelessWidget {
   @override
