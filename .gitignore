@@ -8,6 +8,8 @@ Thumbs.db
 .pub/
 .dart_tool/
 
+pubspec.lock
+
 doc/
 
 Podfile
@@ -19,6 +21,7 @@ ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
 
 GoogleService-Info*.plist
+google-services.json
 
 local.properties
 .gradle/
@@ -32,3 +35,4 @@ GeneratedPluginRegistrant.m
 GeneratedPluginRegistrant.java
 build/
 .flutter-plugins
+.flutter-plugins-dependencies

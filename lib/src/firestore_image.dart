@@ -8,7 +8,7 @@ class FirestoreImage extends StatefulWidget {
       @required this.fallback,
       @required this.placeholder});
 
-  final StorageReference reference;
+  final Reference reference;
   final Widget fallback;
   final ImageProvider placeholder;
 
@@ -18,8 +18,7 @@ class FirestoreImage extends StatefulWidget {
 }
 
 class FirestoreImageState extends State<FirestoreImage> {
-  FirestoreImageState(
-      StorageReference reference, this.fallback, this.placeholder) {
+  FirestoreImageState(Reference reference, this.fallback, this.placeholder) {
     reference
         .getDownloadURL()
         .then(_setImageData)
