@@ -15,7 +15,8 @@ class FirebasePictureUploadController {
 
   SharedPreferences persistentKeyValueStore;
 
-  Future<String> receiveURL(String storageURL, {bool useCaching = true}) async {
+  Future<String> receiveURL(String storageURL,
+      {bool useCaching = true, bool storeInCache = true}) async {
     // try getting the download link from persistency
     if (useCaching) {
       try {
@@ -38,14 +39,14 @@ class FirebasePictureUploadController {
           .getDownloadURL();
 
       // cache link
-      if (useCaching) {
+      if (useCaching || storeInCache) {
         await persistentKeyValueStore.setString(storageURL, downloadLink);
       }
 
       // give url to caller
       return downloadLink;
-    } on Exception catch (error) {
-      print(error);
+    } on Exception {
+      // print(error);
       // print(stackTrace);
     }
     return null;
@@ -62,28 +63,26 @@ class FirebasePictureUploadController {
     return croppedFile;
   }
 
-  Future<StorageReference> uploadProfilePicture(
-      File image,
-      String uploadDirectory,
-      int id,
-      Function imagePostProcessingFuction) async {
+  Future<Reference> uploadProfilePicture(File image, String uploadDirectory,
+      int id, Function imagePostProcessingFuction) async {
     final String uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
-    final StorageReference imgRef =
-        FirebaseStorage.instance.ref().child(uploadPath);
+    final Reference imgRef = FirebaseStorage.instance.ref().child(uploadPath);
 
     // start upload
-    final StorageUploadTask uploadTask =
-        imgRef.putFile(image, new StorageMetadata(contentType: 'image/jpg'));
+    final UploadTask uploadTask =
+        imgRef.putFile(image, new SettableMetadata(contentType: 'image/jpg'));
 
     // wait until upload is complete
-    final StorageTaskSnapshot snapShot = await uploadTask.onComplete;
-    if (snapShot.error != null)
-      throw Exception('Upload failed, Firebase Error Code: ${snapShot.error}');
+    try {
+      await uploadTask;
+    } on Exception catch (error, stackTrace) {
+      throw Exception('Upload failed, Firebase Error: $error $stackTrace');
+    }
 
     return imgRef;
   }
 
-  Future<void> deleteProfilePicture(StorageReference oldUpload) async {
+  Future<void> deleteProfilePicture(Reference oldUpload) async {
     // ask backend to transform images
     await oldUpload.delete();
   }

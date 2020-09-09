@@ -19,6 +19,7 @@ ios/Flutter/Generated.xcconfig
 ios/Runner/GeneratedPluginRegistrant.*
 
 GoogleService-Info*.plist
+google-services.json
 
 local.properties
 .gradle/

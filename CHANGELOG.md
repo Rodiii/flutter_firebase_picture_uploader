@@ -1,3 +1,6 @@
+## 1.1.2
+  * Update dependencies to most recent ones
+
 ## 1.1.1
   * Feature: Close icon color (and background) can be configured
 
