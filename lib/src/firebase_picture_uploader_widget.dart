@@ -39,15 +39,16 @@ class PictureUploadLocalization {
 
 class PictureUploadSettings {
   /// Basic settings for PictureUploadWidget
-  PictureUploadSettings(
-      {this.uploadDirectory = '/Uploads/',
-      this.imageSource = ImageSourceExtended.gallery,
-      this.customUploadFunction,
-      this.customDeleteFunction,
-      this.onErrorFunction,
-      this.minImageCount = 0,
-      this.maxImageCount = 5,
-      this.imageManipulationSettings = const ImageManipulationSettings()});
+  PictureUploadSettings({
+    this.uploadDirectory = '/Uploads/',
+    this.imageSource = ImageSourceExtended.gallery,
+    this.customUploadFunction,
+    this.customDeleteFunction,
+    this.onErrorFunction,
+    this.minImageCount = 0,
+    this.maxImageCount = 5,
+    this.imageManipulationSettings = const ImageManipulationSettings(),
+  });
 
   /// The directory where you want to upload to
   final String uploadDirectory;
@@ -151,7 +152,13 @@ class PictureUploadWidget extends StatefulWidget {
       @required this.onPicturesChange,
       this.initialImages,
       this.buttonText = 'Upload Picture',
-      this.enabled = true});
+      this.enabled = true,
+      FirebaseStorage storageInstance})
+      : assert(settings != null &&
+            buttonStyle != null &&
+            localization != null &&
+            onPicturesChange != null),
+        storageInstance = storageInstance ?? FirebaseStorage.instance;
 
   /// Function is called after an image is uploaded, the the UploadJob as parameter
   final Function onPicturesChange;
@@ -174,8 +181,8 @@ class PictureUploadWidget extends StatefulWidget {
   /// All ui customization settings for the upload button
   final PictureUploadButtonStyle buttonStyle;
 
-  static final FirebasePictureUploadController pictureUploadController =
-      new FirebasePictureUploadController();
+  /// The firebase storage instance to be used by the plugin
+  final FirebaseStorage storageInstance;
 
   @override
   _PictureUploadWidgetState createState() => new _PictureUploadWidgetState();
@@ -185,6 +192,7 @@ class PictureUploadWidget extends StatefulWidget {
 class _PictureUploadWidgetState extends State<PictureUploadWidget> {
   int _uploadsProcessing = 0;
   List<UploadJob> _activeUploadedFiles = [];
+  FirebasePictureUploadController _pictureUploadController;
 
   @override
   void initState() {
@@ -193,6 +201,9 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
     if (widget.initialImages != null) {
       _activeUploadedFiles = widget.initialImages;
     }
+
+    _pictureUploadController =
+        new FirebasePictureUploadController(widget.storageInstance);
 
     if (_activeUploadedFiles.length < widget.settings.maxImageCount &&
         !activeJobsContainUploadWidget()) {
@@ -297,11 +308,13 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
         displayedImagesCount = displayedImagesCount - 1;
 
       uploadedImages.add(new SingleProfilePictureUploadWidget(
-          initialValue: uploadJob,
-          onPictureChange: onImageChange,
-          position: cnt,
-          enableDelete: displayedImagesCount > widget.settings.minImageCount,
-          pictureUploadWidget: widget));
+        initialValue: uploadJob,
+        onPictureChange: onImageChange,
+        position: cnt,
+        enableDelete: displayedImagesCount > widget.settings.minImageCount,
+        pictureUploadWidget: widget,
+        pictureUploadController: _pictureUploadController,
+      ));
       cnt++;
     }
 
@@ -326,19 +339,21 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 }
 
 class SingleProfilePictureUploadWidget extends StatefulWidget {
-  SingleProfilePictureUploadWidget({
-    @required this.initialValue,
-    @required this.onPictureChange,
-    this.position,
-    this.enableDelete = false,
-    this.pictureUploadWidget,
-  }) : super(key: new Key(initialValue.id.toString()));
+  SingleProfilePictureUploadWidget(
+      {@required this.initialValue,
+      @required this.onPictureChange,
+      this.position,
+      this.enableDelete = false,
+      this.pictureUploadWidget,
+      this.pictureUploadController})
+      : super(key: new Key(initialValue.id.toString()));
 
   final Function onPictureChange;
   final UploadJob initialValue;
   final bool enableDelete;
   final int position;
   final PictureUploadWidget pictureUploadWidget;
+  final FirebasePictureUploadController pictureUploadController;
 
   @override
   _SingleProfilePictureUploadWidgetState createState() =>
@@ -359,7 +374,7 @@ class _SingleProfilePictureUploadWidgetState
 
     if (_uploadJob.image == null && _uploadJob.storageReference != null) {
       _uploadJob.uploadProcessing = true;
-      PictureUploadWidget.pictureUploadController
+      widget.pictureUploadController
           .receiveURL(_uploadJob.storageReference.fullPath)
           .then(onProfileImageURLReceived);
     }
@@ -434,7 +449,7 @@ class _SingleProfilePictureUploadWidgetState
     File finalImage = File(image.path);
     if (widget.pictureUploadWidget.settings.imageManipulationSettings
         .enableCropping) {
-      finalImage = await PictureUploadWidget.pictureUploadController.cropImage(
+      finalImage = await widget.pictureUploadController.cropImage(
           File(image.path),
           widget.pictureUploadWidget.settings.imageManipulationSettings);
     }
@@ -458,8 +473,7 @@ class _SingleProfilePictureUploadWidgetState
             .customUploadFunction(finalImage, _uploadJob.id);
       } else {
         // else use default one
-        _uploadJob.storageReference = await PictureUploadWidget
-            .pictureUploadController
+        _uploadJob.storageReference = await widget.pictureUploadController
             .uploadProfilePicture(
                 finalImage,
                 widget.pictureUploadWidget.settings.uploadDirectory,
@@ -507,7 +521,7 @@ class _SingleProfilePictureUploadWidgetState
             .customDeleteFunction(_uploadJob.storageReference);
       } else {
         // else use default one
-        await PictureUploadWidget.pictureUploadController
+        await widget.pictureUploadController
             .deleteProfilePicture(_uploadJob.storageReference);
       }
     } on Exception catch (error, stackTrace) {

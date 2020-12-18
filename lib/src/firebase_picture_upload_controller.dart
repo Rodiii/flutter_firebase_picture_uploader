@@ -8,10 +8,14 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebasePictureUploadController {
-  FirebasePictureUploadController() {
+  FirebasePictureUploadController(FirebaseStorage storageInstance) {
+    _storageInstance = storageInstance;
+
     SharedPreferences.getInstance()
         .then((sharedPref) => persistentKeyValueStore = sharedPref);
   }
+
+  FirebaseStorage _storageInstance;
 
   SharedPreferences persistentKeyValueStore;
 
@@ -33,10 +37,8 @@ class FirebasePictureUploadController {
 
     // if downloadLink is null get it from the storage
     try {
-      final String downloadLink = await FirebaseStorage.instance
-          .ref()
-          .child(storageURL)
-          .getDownloadURL();
+      final String downloadLink =
+          await _storageInstance.ref().child(storageURL).getDownloadURL();
 
       // cache link
       if (useCaching || storeInCache) {
@@ -66,7 +68,7 @@ class FirebasePictureUploadController {
   Future<Reference> uploadProfilePicture(File image, String uploadDirectory,
       int id, Function imagePostProcessingFuction) async {
     final String uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
-    final Reference imgRef = FirebaseStorage.instance.ref().child(uploadPath);
+    final Reference imgRef = _storageInstance.ref().child(uploadPath);
 
     // start upload
     final UploadTask uploadTask =

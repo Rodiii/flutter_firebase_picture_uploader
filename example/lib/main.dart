@@ -56,8 +56,8 @@ class _MyHomeState extends State<MyHome> {
                 imageSource: ImageSourceExtended.askUser,
                 minImageCount: 0,
                 maxImageCount: 5,
-                imageManipulationSettings:
-                    const ImageManipulationSettings(compressQuality: 75)),
+                imageManipulationSettings: const ImageManipulationSettings(
+                    enableCropping: true, compressQuality: 75)),
             enabled: true,
           ),
         ],
