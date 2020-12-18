@@ -24,7 +24,7 @@ enum ImageSourceExtended {
 
 class PictureUploadLocalization {
   /// Localization for PictureUploadWidget
-  const PictureUploadLocalization(
+  PictureUploadLocalization(
       {this.camera = 'Camera', this.gallery = 'Gallery', this.abort = 'Abort'});
 
   /// Camera text for image input selection
@@ -39,7 +39,7 @@ class PictureUploadLocalization {
 
 class PictureUploadSettings {
   /// Basic settings for PictureUploadWidget
-  const PictureUploadSettings(
+  PictureUploadSettings(
       {this.uploadDirectory = '/Uploads/',
       this.imageSource = ImageSourceExtended.gallery,
       this.customUploadFunction,
@@ -97,7 +97,7 @@ class ImageManipulationSettings {
 
 class PictureUploadButtonStyle {
   /// Style options for PictureUploadWidget
-  const PictureUploadButtonStyle({
+  PictureUploadButtonStyle({
     this.iconData = CupertinoIcons.photo_camera,
     this.iconSize = 40.0,
     this.backgroundColor = CupertinoColors.systemBlue,
@@ -141,12 +141,12 @@ class PictureUploadWidget extends StatefulWidget {
   /// PictureUploadWidget displays a customizable button which opens a specified image source (see settings)
   /// which is used to select an image. The selected image can be manipulated and is uploaded afterwards.
   PictureUploadWidget(
-      {@required this.onPicturesChange,
-      this.settings = const PictureUploadSettings(),
+      {@required this.settings,
+      @required this.buttonStyle,
+      @required this.localization,
+      @required this.onPicturesChange,
       this.initialImages,
       this.buttonText = 'Upload Picture',
-      this.buttonStyle = const PictureUploadButtonStyle(),
-      this.localization = const PictureUploadLocalization(),
       this.enabled = true});
 
   /// Function is called after an image is uploaded, the the UploadJob as parameter
@@ -455,6 +455,7 @@ class _SingleProfilePictureUploadWidgetState
                 _uploadJob.id,
                 widget.pictureUploadWidget.settings.customUploadFunction);
       }
+      // ignore: avoid_catches_without_on_clauses
     } catch (error, stackTrace) {
       _uploadJob.image = null;
       _uploadJob.storageReference = null;

@@ -47,9 +47,10 @@ class _MyHomeState extends State<MyHome> {
           PictureUploadWidget(
             initialImages: _profilePictures,
             onPicturesChange: profilePictureCallback,
-            buttonStyle: const PictureUploadButtonStyle(),
+            buttonStyle: PictureUploadButtonStyle(),
             buttonText: 'Upload Picture',
-            settings: const PictureUploadSettings(
+            localization: PictureUploadLocalization(),
+            settings: PictureUploadSettings(
                 // customDeleteFunction: ProfileController.deleteProfilePicture,
                 // customUploadFunction: RecipeController.uploadRecipePicture,
                 imageSource: ImageSourceExtended.askUser,
@@ -68,11 +69,6 @@ class _MyHomeState extends State<MyHome> {
           padding: const EdgeInsets.fromLTRB(20, 100, 20, 50),
           child: Column(children: <Widget>[profilePictureTile])),
     );
-  }
-
-  void onErrorCallback(error, stackTrace) {
-    print(error);
-    print(stackTrace);
   }
 
   void profilePictureCallback(
