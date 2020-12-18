@@ -77,10 +77,14 @@ class PictureUploadSettings {
 class ImageManipulationSettings {
   /// The settings how the image shall be modified before upload
   const ImageManipulationSettings(
-      {this.aspectRatio = const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+      {this.enableCropping = true,
+      this.aspectRatio = const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
       this.maxWidth = 800,
       this.maxHeight = 800,
       this.compressQuality = 75});
+
+  /// If true, a cropping screen will appear after image selection (with maxWidth, maxHeight & aspectRatio setting applied)
+  final bool enableCropping;
 
   /// The requested aspect ratio for the image
   final CropAspectRatio aspectRatio;
@@ -425,16 +429,23 @@ class _SingleProfilePictureUploadWidgetState
     if (image == null) {
       return;
     }
-    final imageCropped = await PictureUploadWidget.pictureUploadController
-        .cropImage(File(image.path),
-            widget.pictureUploadWidget.settings.imageManipulationSettings);
-    if (imageCropped == null) {
+
+    // crop image if requested
+    File finalImage = File(image.path);
+    if (widget.pictureUploadWidget.settings.imageManipulationSettings
+        .enableCropping) {
+      finalImage = await PictureUploadWidget.pictureUploadController.cropImage(
+          File(image.path),
+          widget.pictureUploadWidget.settings.imageManipulationSettings);
+    }
+
+    if (finalImage == null) {
       return;
     }
 
     // update display state
     setState(() {
-      _uploadJob.image = imageCropped;
+      _uploadJob.image = finalImage;
       _uploadJob.uploadProcessing = true;
     });
     widget.onPictureChange(_uploadJob);
@@ -444,13 +455,13 @@ class _SingleProfilePictureUploadWidgetState
       // in case of custom upload function, use it
       if (widget.pictureUploadWidget.settings.customUploadFunction != null) {
         _uploadJob.storageReference = await widget.pictureUploadWidget.settings
-            .customUploadFunction(imageCropped, _uploadJob.id);
+            .customUploadFunction(finalImage, _uploadJob.id);
       } else {
         // else use default one
         _uploadJob.storageReference = await PictureUploadWidget
             .pictureUploadController
             .uploadProfilePicture(
-                imageCropped,
+                finalImage,
                 widget.pictureUploadWidget.settings.uploadDirectory,
                 _uploadJob.id,
                 widget.pictureUploadWidget.settings.customUploadFunction);
