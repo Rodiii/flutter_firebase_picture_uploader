@@ -146,18 +146,17 @@ class PictureUploadWidget extends StatefulWidget {
   /// PictureUploadWidget displays a customizable button which opens a specified image source (see settings)
   /// which is used to select an image. The selected image can be manipulated and is uploaded afterwards.
   PictureUploadWidget(
-      {@required this.settings,
-      @required this.buttonStyle,
-      @required this.localization,
+      {PictureUploadSettings settings,
+      PictureUploadButtonStyle buttonStyle,
+      PictureUploadLocalization localization,
+      FirebaseStorage storageInstance,
       @required this.onPicturesChange,
       this.initialImages,
       this.buttonText = 'Upload Picture',
-      this.enabled = true,
-      FirebaseStorage storageInstance})
-      : assert(settings != null &&
-            buttonStyle != null &&
-            localization != null &&
-            onPicturesChange != null),
+      this.enabled = true})
+      : settings = settings ?? PictureUploadSettings(),
+        buttonStyle = buttonStyle ?? PictureUploadButtonStyle(),
+        localization = localization ?? PictureUploadLocalization(),
         storageInstance = storageInstance ?? FirebaseStorage.instance;
 
   /// Function is called after an image is uploaded, the the UploadJob as parameter
