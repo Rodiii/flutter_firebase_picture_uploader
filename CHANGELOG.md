@@ -1,3 +1,10 @@
+## 1.2.0
+  * Feature: add option to disable cropping
+  * Feature: add option to select an other firebase storage bucket for plugin
+  * Refactor: add compatibility to old versions again
+  * Refactor: replace const parameters where it makes sense
+  * Refactor: update dependencies to most recent ones
+  
 ## 1.1.2
   * Update dependencies to most recent ones
 

@@ -8,8 +8,6 @@ Thumbs.db
 .pub/
 .dart_tool/
 
-pubspec.lock
-
 doc/
 
 Podfile
