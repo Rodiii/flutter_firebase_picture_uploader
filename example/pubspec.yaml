@@ -2,6 +2,9 @@ name: example
 description: Flutter Firebase Picture Uploader Example
 version: 1.0.2
 
+environment:
+  sdk: '>=2.0.0 <3.0.0' 
+
 dependencies:
   firebase_picture_uploader:
     path: ../

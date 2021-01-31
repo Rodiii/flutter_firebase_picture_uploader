@@ -1,3 +1,6 @@
+## 1.2.1
+  * Refactor: update dependencies to most recent ones
+
 ## 1.2.0
   * Feature: add option to disable cropping
   * Feature: add option to select an other firebase storage bucket for plugin
