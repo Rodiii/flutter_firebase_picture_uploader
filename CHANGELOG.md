@@ -1,3 +1,6 @@
+## 1.2.2
+  * Refactor: update dependencies to most recent ones
+
 ## 1.2.1
   * Refactor: update dependencies to most recent ones
 
