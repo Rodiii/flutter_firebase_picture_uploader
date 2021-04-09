@@ -1,6 +1,6 @@
 name: firebase_picture_uploader
 description: Picture upload widget which helps selecting and uploading one or multiple images to firebase storage.
-version: 1.2.2
+version: 1.2.3
 homepage: https://github.com/Rodiii/flutter_firebase_picture_uploader
 maintainer: Christoph Rothermel (@rothech)
 
@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
     
-  cached_network_image: ^2.5.1
+  cached_network_image: ^3.0.0
   firebase_storage: ^8.0.0
   firebase_core: ^1.0.1
   image: ^3.0.1
-  image_picker: ^0.7.2+1
+  image_picker: ^0.7.4
   image_cropper: ^1.4.0
   shared_preferences: ^2.0.4
   path_provider: ^2.0.1
