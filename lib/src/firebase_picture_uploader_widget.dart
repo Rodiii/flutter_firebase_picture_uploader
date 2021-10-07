@@ -57,13 +57,13 @@ class PictureUploadSettings {
   final ImageSourceExtended imageSource;
 
   /// The function which shall be called to upload the image, if you don't want to use the default one
-  final Function customUploadFunction;
+  final Function? customUploadFunction;
 
   /// The function which shall be called to delete the image, if you don't want to use the default one
-  final Function customDeleteFunction;
+  final Function? customDeleteFunction;
 
   /// The function which shall be called if an error occurs
-  final Function onErrorFunction;
+  final Function? onErrorFunction;
 
   /// The minimum images which shall be uploaded (controls the delete button)
   final int minImageCount;
@@ -146,11 +146,11 @@ class PictureUploadWidget extends StatefulWidget {
   /// PictureUploadWidget displays a customizable button which opens a specified image source (see settings)
   /// which is used to select an image. The selected image can be manipulated and is uploaded afterwards.
   PictureUploadWidget(
-      {PictureUploadSettings settings,
-      PictureUploadButtonStyle buttonStyle,
-      PictureUploadLocalization localization,
-      FirebaseStorage storageInstance,
-      @required this.onPicturesChange,
+      {PictureUploadSettings? settings,
+      PictureUploadButtonStyle? buttonStyle,
+      PictureUploadLocalization? localization,
+      FirebaseStorage? storageInstance,
+      required this.onPicturesChange,
       this.initialImages,
       this.buttonText = 'Upload Picture',
       this.enabled = true})
@@ -163,7 +163,7 @@ class PictureUploadWidget extends StatefulWidget {
   final Function onPicturesChange;
 
   /// The images which shall be displayed initiall
-  final List<UploadJob> initialImages;
+  final List<UploadJob>? initialImages;
 
   /// The text displayed within the upload button
   final String buttonText;
@@ -190,8 +190,8 @@ class PictureUploadWidget extends StatefulWidget {
 /// State of the widget
 class _PictureUploadWidgetState extends State<PictureUploadWidget> {
   int _uploadsProcessing = 0;
-  List<UploadJob> _activeUploadedFiles = [];
-  FirebasePictureUploadController _pictureUploadController;
+  List<UploadJob>? _activeUploadedFiles = [];
+  FirebasePictureUploadController? _pictureUploadController;
 
   @override
   void initState() {
@@ -204,14 +204,14 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
     _pictureUploadController =
         new FirebasePictureUploadController(widget.storageInstance);
 
-    if (_activeUploadedFiles.length < widget.settings.maxImageCount &&
+    if (_activeUploadedFiles!.length < widget.settings.maxImageCount &&
         !activeJobsContainUploadWidget()) {
-      _activeUploadedFiles.add(new UploadJob());
+      _activeUploadedFiles!.add(new UploadJob());
     }
   }
 
   bool activeJobsContainUploadWidget() {
-    for (var job in _activeUploadedFiles) {
+    for (var job in _activeUploadedFiles!) {
       if (job.storageReference == null &&
           job.image == null &&
           job.imageProvider == null &&
@@ -225,9 +225,9 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
   void onImageChange(UploadJob uploadJob) {
     // update Uploadjobs list
-    for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
-      if (_activeUploadedFiles[i].id == uploadJob.id) {
-        _activeUploadedFiles[i] = uploadJob;
+    for (int i = _activeUploadedFiles!.length - 1; i >= 0; i--) {
+      if (_activeUploadedFiles![i].id == uploadJob.id) {
+        _activeUploadedFiles![i] = uploadJob;
         break;
       }
     }
@@ -238,9 +238,9 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
       // add most recent object
       if (uploadJob.action == UploadAction.actionUpload &&
-          _activeUploadedFiles.length < widget.settings.maxImageCount &&
+          _activeUploadedFiles!.length < widget.settings.maxImageCount &&
           !activeJobsContainUploadWidget()) {
-        _activeUploadedFiles.add(new UploadJob());
+        _activeUploadedFiles!.add(new UploadJob());
       }
     } else {
       _uploadsProcessing--;
@@ -249,32 +249,32 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
         // issue occured? => remove
         if (uploadJob.storageReference == null) {
           // remove from active uploaded files
-          for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
-            if (_activeUploadedFiles[i].id == uploadJob.id) {
-              _activeUploadedFiles.removeAt(i);
+          for (int i = _activeUploadedFiles!.length - 1; i >= 0; i--) {
+            if (_activeUploadedFiles![i].id == uploadJob.id) {
+              _activeUploadedFiles!.removeAt(i);
               break;
             }
           }
 
-          if (_activeUploadedFiles.length ==
+          if (_activeUploadedFiles!.length ==
                   widget.settings.maxImageCount - 1 &&
               !activeJobsContainUploadWidget()) {
-            _activeUploadedFiles.add(new UploadJob());
+            _activeUploadedFiles!.add(new UploadJob());
           }
         }
       } else if (uploadJob.action == UploadAction.actionDelete &&
           uploadJob.image == null) {
         // remove from active uploaded files
-        for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
-          if (_activeUploadedFiles[i].id == uploadJob.id) {
-            _activeUploadedFiles.removeAt(i);
+        for (int i = _activeUploadedFiles!.length - 1; i >= 0; i--) {
+          if (_activeUploadedFiles![i].id == uploadJob.id) {
+            _activeUploadedFiles!.removeAt(i);
             break;
           }
         }
 
-        if (_activeUploadedFiles.length == widget.settings.maxImageCount - 1 &&
+        if (_activeUploadedFiles!.length == widget.settings.maxImageCount - 1 &&
             !activeJobsContainUploadWidget()) {
-          _activeUploadedFiles.add(new UploadJob());
+          _activeUploadedFiles!.add(new UploadJob());
         }
       }
     }
@@ -301,8 +301,8 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
     int cnt = 0;
 
-    for (UploadJob uploadJob in _activeUploadedFiles) {
-      int displayedImagesCount = _activeUploadedFiles.length;
+    for (UploadJob uploadJob in _activeUploadedFiles!) {
+      int displayedImagesCount = _activeUploadedFiles!.length;
       if (activeJobsContainUploadWidget())
         displayedImagesCount = displayedImagesCount - 1;
 
@@ -322,8 +322,8 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_activeUploadedFiles.isEmpty) {
-      _activeUploadedFiles.add(new UploadJob());
+    if (_activeUploadedFiles!.isEmpty) {
+      _activeUploadedFiles!.add(new UploadJob());
     }
 
     final List<SingleProfilePictureUploadWidget> pictureUploadWidgets =
@@ -339,8 +339,8 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
 class SingleProfilePictureUploadWidget extends StatefulWidget {
   SingleProfilePictureUploadWidget(
-      {@required this.initialValue,
-      @required this.onPictureChange,
+      {required this.initialValue,
+      required this.onPictureChange,
       this.position,
       this.enableDelete = false,
       this.pictureUploadWidget,
@@ -350,9 +350,9 @@ class SingleProfilePictureUploadWidget extends StatefulWidget {
   final Function onPictureChange;
   final UploadJob initialValue;
   final bool enableDelete;
-  final int position;
-  final PictureUploadWidget pictureUploadWidget;
-  final FirebasePictureUploadController pictureUploadController;
+  final int? position;
+  final PictureUploadWidget? pictureUploadWidget;
+  final FirebasePictureUploadController? pictureUploadController;
 
   @override
   _SingleProfilePictureUploadWidgetState createState() =>
@@ -362,8 +362,7 @@ class SingleProfilePictureUploadWidget extends StatefulWidget {
 /// State of the widget
 class _SingleProfilePictureUploadWidgetState
     extends State<SingleProfilePictureUploadWidget> {
-  UploadJob _uploadJob;
-  final ImagePicker _imagePicker = ImagePicker();
+  late UploadJob _uploadJob;
 
   @override
   void initState() {
@@ -373,39 +372,39 @@ class _SingleProfilePictureUploadWidgetState
 
     if (_uploadJob.image == null && _uploadJob.storageReference != null) {
       _uploadJob.uploadProcessing = true;
-      widget.pictureUploadController
-          .receiveURL(_uploadJob.storageReference.fullPath)
+      widget.pictureUploadController!
+          .receiveURL(_uploadJob.storageReference!.fullPath)
           .then(onProfileImageURLReceived);
     }
   }
 
-  void onProfileImageURLReceived(String downloadURL) {
+  void onProfileImageURLReceived(String? downloadURL) {
     setState(() {
-      _uploadJob.imageProvider = CachedNetworkImageProvider(downloadURL);
+      _uploadJob.imageProvider = CachedNetworkImageProvider(downloadURL!);
       _uploadJob.uploadProcessing = false;
     });
   }
 
-  Future<ImageSource> _askUserForImageSource() async {
+  Future<ImageSource?> _askUserForImageSource() async {
     return await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
         cancelButton: CupertinoActionSheetAction(
           isDestructiveAction: true,
-          child: Text(widget.pictureUploadWidget.localization.abort),
+          child: Text(widget.pictureUploadWidget!.localization.abort),
           onPressed: () {
             Navigator.pop(context, null);
           },
         ),
         actions: <Widget>[
           CupertinoActionSheetAction(
-            child: Text(widget.pictureUploadWidget.localization.camera),
+            child: Text(widget.pictureUploadWidget!.localization.camera),
             onPressed: () {
               Navigator.pop(context, ImageSource.camera);
             },
           ),
           CupertinoActionSheetAction(
-            child: Text(widget.pictureUploadWidget.localization.gallery),
+            child: Text(widget.pictureUploadWidget!.localization.gallery),
             onPressed: () {
               Navigator.pop(context, ImageSource.gallery);
             },
@@ -418,8 +417,8 @@ class _SingleProfilePictureUploadWidgetState
   Future _uploadImage() async {
     _uploadJob.action = UploadAction.actionUpload;
 
-    ImageSource imageSource;
-    switch (widget.pictureUploadWidget.settings.imageSource) {
+    ImageSource? imageSource;
+    switch (widget.pictureUploadWidget!.settings.imageSource) {
       case ImageSourceExtended.camera:
         imageSource = ImageSource.camera;
         break;
@@ -436,21 +435,22 @@ class _SingleProfilePictureUploadWidgetState
     }
 
     // manipulate image as requested
-    final image = await _imagePicker.getImage(
+    final ImagePicker _imagePicker = ImagePicker();
+    final image = await _imagePicker.pickImage(
         source: imageSource,
-        imageQuality: widget.pictureUploadWidget.settings
+        imageQuality: widget.pictureUploadWidget!.settings
             .imageManipulationSettings.compressQuality);
     if (image == null) {
       return;
     }
 
     // crop image if requested
-    File finalImage = File(image.path);
-    if (widget.pictureUploadWidget.settings.imageManipulationSettings
+    File? finalImage = File(image.path);
+    if (widget.pictureUploadWidget!.settings.imageManipulationSettings
         .enableCropping) {
-      finalImage = await widget.pictureUploadController.cropImage(
+      finalImage = await widget.pictureUploadController!.cropImage(
           File(image.path),
-          widget.pictureUploadWidget.settings.imageManipulationSettings);
+          widget.pictureUploadWidget!.settings.imageManipulationSettings);
     }
 
     if (finalImage == null) {
@@ -467,25 +467,26 @@ class _SingleProfilePictureUploadWidgetState
     // upload image
     try {
       // in case of custom upload function, use it
-      if (widget.pictureUploadWidget.settings.customUploadFunction != null) {
-        _uploadJob.storageReference = await widget.pictureUploadWidget.settings
-            .customUploadFunction(finalImage, _uploadJob.id);
+      if (widget.pictureUploadWidget!.settings.customUploadFunction != null) {
+        _uploadJob.storageReference = await widget.pictureUploadWidget!.settings
+            .customUploadFunction!(finalImage, _uploadJob.id);
       } else {
         // else use default one
-        _uploadJob.storageReference = await widget.pictureUploadController
+        _uploadJob.storageReference = await widget.pictureUploadController!
             .uploadProfilePicture(
                 finalImage,
-                widget.pictureUploadWidget.settings.uploadDirectory,
+                widget.pictureUploadWidget!.settings.uploadDirectory,
                 _uploadJob.id,
-                widget.pictureUploadWidget.settings.customUploadFunction);
+                widget.pictureUploadWidget!.settings.customUploadFunction);
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (error, stackTrace) {
       _uploadJob.image = null;
       _uploadJob.storageReference = null;
 
-      if (widget.pictureUploadWidget.settings.onErrorFunction != null) {
-        widget.pictureUploadWidget.settings.onErrorFunction(error, stackTrace);
+      if (widget.pictureUploadWidget!.settings.onErrorFunction != null) {
+        widget.pictureUploadWidget!.settings.onErrorFunction!(
+            error, stackTrace);
       } else {
         print(error);
         print(stackTrace);
@@ -515,21 +516,22 @@ class _SingleProfilePictureUploadWidgetState
     // delete image
     try {
       // in case of custom delete function, use it
-      if (widget.pictureUploadWidget.settings.customDeleteFunction != null) {
-        await widget.pictureUploadWidget.settings
-            .customDeleteFunction(_uploadJob.storageReference);
+      if (widget.pictureUploadWidget!.settings.customDeleteFunction != null) {
+        await widget.pictureUploadWidget!.settings
+            .customDeleteFunction!(_uploadJob.storageReference);
       } else {
         // else use default one
-        await widget.pictureUploadController
-            .deleteProfilePicture(_uploadJob.storageReference);
+        await widget.pictureUploadController!
+            .deleteProfilePicture(_uploadJob.storageReference!);
       }
     } on Exception catch (error, stackTrace) {
       setState(() {
         _uploadJob.image = imgBackup;
       });
 
-      if (widget.pictureUploadWidget.settings.onErrorFunction != null) {
-        widget.pictureUploadWidget.settings.onErrorFunction(error, stackTrace);
+      if (widget.pictureUploadWidget!.settings.onErrorFunction != null) {
+        widget.pictureUploadWidget!.settings.onErrorFunction!(
+            error, stackTrace);
       } else {
         print(error);
         print(stackTrace);
@@ -547,31 +549,31 @@ class _SingleProfilePictureUploadWidgetState
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(widget.pictureUploadWidget.buttonStyle.iconData,
-              color: widget.pictureUploadWidget.buttonStyle.fontColor,
-              size: widget.pictureUploadWidget.buttonStyle.iconSize),
+          Icon(widget.pictureUploadWidget!.buttonStyle.iconData,
+              color: widget.pictureUploadWidget!.buttonStyle.fontColor,
+              size: widget.pictureUploadWidget!.buttonStyle.iconSize),
           const Padding(padding: const EdgeInsets.only(bottom: 5.0)),
-          Text(widget.pictureUploadWidget.buttonText,
+          Text(widget.pictureUploadWidget!.buttonText,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: widget.pictureUploadWidget.buttonStyle.fontColor,
-                  fontSize: widget.pictureUploadWidget.buttonStyle.fontSize)),
+                  color: widget.pictureUploadWidget!.buttonStyle.fontColor,
+                  fontSize: widget.pictureUploadWidget!.buttonStyle.fontSize)),
         ]);
 
     return new CupertinoButton(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
         child: new Container(
-            width: widget.pictureUploadWidget.buttonStyle.width,
-            height: widget.pictureUploadWidget.buttonStyle.height,
+            width: widget.pictureUploadWidget!.buttonStyle.width,
+            height: widget.pictureUploadWidget!.buttonStyle.height,
             decoration: BoxDecoration(
-                color: widget.pictureUploadWidget.buttonStyle.backgroundColor,
+                color: widget.pictureUploadWidget!.buttonStyle.backgroundColor,
                 border: Border.all(
                     color:
-                        widget.pictureUploadWidget.buttonStyle.backgroundColor,
+                        widget.pictureUploadWidget!.buttonStyle.backgroundColor,
                     width: 0.0),
                 borderRadius: new BorderRadius.circular(8.0)),
             child: buttonContent),
-        onPressed: !widget.pictureUploadWidget.enabled ? null : _uploadImage);
+        onPressed: !widget.pictureUploadWidget!.enabled ? null : _uploadImage);
   }
 
   Widget getExistingImageWidget() {
@@ -581,41 +583,41 @@ class _SingleProfilePictureUploadWidgetState
           borderRadius: new BorderRadius.circular(8.0),
           child: _uploadJob.imageProvider != null
               ? Image(
-                  image: _uploadJob.imageProvider,
-                  width: widget.pictureUploadWidget.buttonStyle.width,
-                  height: widget.pictureUploadWidget.buttonStyle.height,
+                  image: _uploadJob.imageProvider!,
+                  width: widget.pictureUploadWidget!.buttonStyle.width,
+                  height: widget.pictureUploadWidget!.buttonStyle.height,
                   fit: BoxFit.fitHeight)
               : _uploadJob.image != null
                   ? Image.file(
-                      _uploadJob.image,
-                      width: widget.pictureUploadWidget.buttonStyle.width,
-                      height: widget.pictureUploadWidget.buttonStyle.height,
+                      _uploadJob.image!,
+                      width: widget.pictureUploadWidget!.buttonStyle.width,
+                      height: widget.pictureUploadWidget!.buttonStyle.height,
                       fit: BoxFit.fitHeight,
                     )
                   : Container(),
         ));
 
     final Widget processingIndicator = Container(
-        width: widget.pictureUploadWidget.buttonStyle.width,
-        height: widget.pictureUploadWidget.buttonStyle.height + 10,
+        width: widget.pictureUploadWidget!.buttonStyle.width,
+        height: widget.pictureUploadWidget!.buttonStyle.height + 10,
         child: const Center(child: const CircularProgressIndicator()));
 
     final Widget deleteButton = Container(
-        width: widget.pictureUploadWidget.buttonStyle.width + 10,
-        height: widget.pictureUploadWidget.buttonStyle.height,
+        width: widget.pictureUploadWidget!.buttonStyle.width + 10,
+        height: widget.pictureUploadWidget!.buttonStyle.height,
         color: Colors.transparent,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             GestureDetector(
-              onTap: !widget.pictureUploadWidget.enabled ? null : _deleteImage,
+              onTap: !widget.pictureUploadWidget!.enabled ? null : _deleteImage,
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                   border: Border.all(
-                      color: widget.pictureUploadWidget.buttonStyle
+                      color: widget.pictureUploadWidget!.buttonStyle
                           .closeIconBackgroundColor,
                       width: 1.0),
                 ),
@@ -623,7 +625,7 @@ class _SingleProfilePictureUploadWidgetState
                 width: 28.0, // width of the button
                 child: Icon(Icons.close,
                     color:
-                        widget.pictureUploadWidget.buttonStyle.closeIconColor,
+                        widget.pictureUploadWidget!.buttonStyle.closeIconColor,
                     size: 17.0),
               ),
             ),
@@ -661,22 +663,22 @@ enum UploadAction { actionDelete, actionUpload, actionChange }
 class UploadJob {
   UploadJob({this.action});
 
-  UploadAction action;
+  UploadAction? action;
   int id = DateTime.now().millisecondsSinceEpoch;
   bool uploadProcessing = false;
-  File image;
-  File oldImage;
-  Reference oldStorageReference;
-  ImageProvider imageProvider; // for existing images
+  File? image;
+  File? oldImage;
+  Reference? oldStorageReference;
+  ImageProvider? imageProvider; // for existing images
 
-  Reference _storageReference;
-  Reference get storageReference => _storageReference;
-  set storageReference(Reference storageReference) {
+  Reference? _storageReference;
+  Reference? get storageReference => _storageReference;
+  set storageReference(Reference? storageReference) {
     _storageReference = storageReference;
     if (_storageReference != null &&
-        _storageReference.fullPath != null &&
-        _storageReference.fullPath != '') {
-      final String fileName = _storageReference.fullPath.split('/').last;
+        _storageReference!.fullPath != null &&
+        _storageReference!.fullPath != '') {
+      final String fileName = _storageReference!.fullPath.split('/').last;
 
       // The filename mist be like custom1_..._custom_x_id_customy.(jpg|png|...)
       final List<String> fileParts = fileName.split('_');
@@ -687,9 +689,9 @@ class UploadJob {
 
   bool compareTo(UploadJob other) {
     if (storageReference != null && other.storageReference != null)
-      return storageReference.fullPath == other.storageReference.fullPath;
+      return storageReference!.fullPath == other.storageReference!.fullPath;
     else if (image != null && other.image != null)
-      return image.path == other.image.path;
+      return image!.path == other.image!.path;
     else
       return false;
   }
@@ -703,7 +705,7 @@ class UploadJob {
     return id == otherUploadJob.id;
   }
 
-  int _hashCode;
+  int? _hashCode;
   @override
   int get hashCode {
     return _hashCode ??= id.hashCode;

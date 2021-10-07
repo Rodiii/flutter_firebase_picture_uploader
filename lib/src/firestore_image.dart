@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 
 class FirestoreImage extends StatefulWidget {
   FirestoreImage(
-      {@required this.reference,
-      @required this.fallback,
-      @required this.placeholder});
+      {required this.reference,
+      required this.fallback,
+      required this.placeholder});
 
   final Reference reference;
   final Widget fallback;
@@ -32,7 +32,7 @@ class FirestoreImageState extends State<FirestoreImage> {
   final Widget fallback;
   final ImageProvider placeholder;
 
-  String _imageUrl;
+  late String _imageUrl;
   bool _loaded = false;
 
   void _setImageData(dynamic url) {

@@ -1,3 +1,7 @@
+## 1.3.0
+  * Refactor: update dependencies to most recent ones
+  * Refactor: introduce null-sound-safety
+
 ## 1.2.3
   * Refactor: update dependencies to most recent ones
 

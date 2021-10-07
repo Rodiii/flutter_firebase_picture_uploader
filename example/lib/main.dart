@@ -27,7 +27,7 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  List<UploadJob> _profilePictures = [];
+  List<UploadJob>? _profilePictures = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _MyHomeState extends State<MyHome> {
   }
 
   void profilePictureCallback(
-      {List<UploadJob> uploadJobs, bool pictureUploadProcessing}) {
+      {List<UploadJob>? uploadJobs, bool? pictureUploadProcessing}) {
     _profilePictures = uploadJobs;
   }
 }

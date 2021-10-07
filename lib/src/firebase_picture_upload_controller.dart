@@ -15,17 +15,17 @@ class FirebasePictureUploadController {
         .then((sharedPref) => persistentKeyValueStore = sharedPref);
   }
 
-  FirebaseStorage _storageInstance;
+  late FirebaseStorage _storageInstance;
 
-  SharedPreferences persistentKeyValueStore;
+  SharedPreferences? persistentKeyValueStore;
 
-  Future<String> receiveURL(String storageURL,
+  Future<String?> receiveURL(String storageURL,
       {bool useCaching = true, bool storeInCache = true}) async {
     // try getting the download link from persistency
     if (useCaching) {
       try {
         persistentKeyValueStore ??= await SharedPreferences.getInstance();
-        final String cachedURL = persistentKeyValueStore.getString(storageURL);
+        final String? cachedURL = persistentKeyValueStore!.getString(storageURL);
         if (cachedURL != null) {
           return cachedURL;
         }
@@ -42,7 +42,7 @@ class FirebasePictureUploadController {
 
       // cache link
       if (useCaching || storeInCache) {
-        await persistentKeyValueStore.setString(storageURL, downloadLink);
+        await persistentKeyValueStore!.setString(storageURL, downloadLink);
       }
 
       // give url to caller
@@ -54,9 +54,9 @@ class FirebasePictureUploadController {
     return null;
   }
 
-  Future<File> cropImage(
+  Future<File?> cropImage(
       File imageFile, ImageManipulationSettings cropSettings) async {
-    final File croppedFile = await ImageCropper.cropImage(
+    final File? croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
       aspectRatio: cropSettings.aspectRatio,
       maxWidth: cropSettings.maxWidth,
@@ -66,7 +66,7 @@ class FirebasePictureUploadController {
   }
 
   Future<Reference> uploadProfilePicture(File image, String uploadDirectory,
-      int id, Function imagePostProcessingFuction) async {
+      int id, Function? imagePostProcessingFuction) async {
     final String uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
     final Reference imgRef = _storageInstance.ref().child(uploadPath);
 
