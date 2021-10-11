@@ -110,6 +110,7 @@ class PictureUploadButtonStyle {
     this.height = 100,
     this.fontColor = CupertinoColors.white,
     this.fontSize = 14.0,
+    this.radius = 8,
     this.closeIconColor = CupertinoColors.systemBlue,
     this.closeIconBackgroundColor = CupertinoColors.lightBackgroundGray,
   });
@@ -122,6 +123,9 @@ class PictureUploadButtonStyle {
 
   /// The background color of the upload button
   final Color backgroundColor;
+
+  ///The radius of a buttom
+  final double radius;
 
   /// The width of the button
   final double width;
@@ -571,7 +575,7 @@ class _SingleProfilePictureUploadWidgetState
                     color:
                         widget.pictureUploadWidget!.buttonStyle.backgroundColor,
                     width: 0.0),
-                borderRadius: new BorderRadius.circular(8.0)),
+                borderRadius: new BorderRadius.circular(widget.pictureUploadWidget.buttonStyle.radius)),
             child: buttonContent),
         onPressed: !widget.pictureUploadWidget!.enabled ? null : _uploadImage);
   }
@@ -580,7 +584,7 @@ class _SingleProfilePictureUploadWidgetState
     final Container existingImageWidget = Container(
         padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
         child: ClipRRect(
-          borderRadius: new BorderRadius.circular(8.0),
+          borderRadius: new BorderRadius.circular(widget.pictureUploadWidget.buttonStyle.radius),
           child: _uploadJob.imageProvider != null
               ? Image(
                   image: _uploadJob.imageProvider!,
