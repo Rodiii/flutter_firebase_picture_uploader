@@ -575,7 +575,8 @@ class _SingleProfilePictureUploadWidgetState
                     color:
                         widget.pictureUploadWidget!.buttonStyle.backgroundColor,
                     width: 0.0),
-                borderRadius: new BorderRadius.circular(widget.pictureUploadWidget.buttonStyle.radius)),
+                borderRadius: new BorderRadius.circular(
+                    widget.pictureUploadWidget!.buttonStyle.radius)),
             child: buttonContent),
         onPressed: !widget.pictureUploadWidget!.enabled ? null : _uploadImage);
   }
@@ -584,7 +585,8 @@ class _SingleProfilePictureUploadWidgetState
     final Container existingImageWidget = Container(
         padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
         child: ClipRRect(
-          borderRadius: new BorderRadius.circular(widget.pictureUploadWidget.buttonStyle.radius),
+          borderRadius: new BorderRadius.circular(
+              widget.pictureUploadWidget!.buttonStyle.radius),
           child: _uploadJob.imageProvider != null
               ? Image(
                   image: _uploadJob.imageProvider!,

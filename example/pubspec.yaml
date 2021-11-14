@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   firebase_picture_uploader:
-    path: ../ 
+    path: ../
 
   flutter: 
     sdk: flutter

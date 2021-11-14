@@ -25,7 +25,8 @@ class FirebasePictureUploadController {
     if (useCaching) {
       try {
         persistentKeyValueStore ??= await SharedPreferences.getInstance();
-        final String? cachedURL = persistentKeyValueStore!.getString(storageURL);
+        final String? cachedURL =
+            persistentKeyValueStore!.getString(storageURL);
         if (cachedURL != null) {
           return cachedURL;
         }

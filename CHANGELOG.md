@@ -1,3 +1,6 @@
+## 1.3.1
+  * Feature: Add radius option to button style
+
 ## 1.3.0
   * Refactor: update dependencies to most recent ones
   * Refactor: introduce null-sound-safety
