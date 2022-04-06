@@ -57,7 +57,7 @@ class FirebasePictureUploadController {
 
   Future<File?> cropImage(
       File imageFile, ImageManipulationSettings cropSettings) async {
-    final File? croppedFile = await ImageCropper.cropImage(
+    final File? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       aspectRatio: cropSettings.aspectRatio,
       maxWidth: cropSettings.maxWidth,
