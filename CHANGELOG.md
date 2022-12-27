@@ -1,3 +1,6 @@
+## 1.3.2
+  * Refactor: Update dependencies
+
 ## 1.3.1
   * Feature: Add radius option to button style
 

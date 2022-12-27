@@ -55,9 +55,9 @@ class FirebasePictureUploadController {
     return null;
   }
 
-  Future<File?> cropImage(
+  Future<CroppedFile?> cropImage(
       File imageFile, ImageManipulationSettings cropSettings) async {
-    final File? croppedFile = await ImageCropper.cropImage(
+    final CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       aspectRatio: cropSettings.aspectRatio,
       maxWidth: cropSettings.maxWidth,
@@ -66,14 +66,17 @@ class FirebasePictureUploadController {
     return croppedFile;
   }
 
-  Future<Reference> uploadProfilePicture(File image, String uploadDirectory,
-      int id, Function? imagePostProcessingFuction) async {
+  Future<Reference> uploadProfilePicture(
+      CroppedFile image,
+      String uploadDirectory,
+      int id,
+      Function? imagePostProcessingFuction) async {
     final String uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
     final Reference imgRef = _storageInstance.ref().child(uploadPath);
 
     // start upload
-    final UploadTask uploadTask =
-        imgRef.putFile(image, new SettableMetadata(contentType: 'image/jpg'));
+    final UploadTask uploadTask = imgRef.putFile(
+        File(image.path), new SettableMetadata(contentType: 'image/jpg'));
 
     // wait until upload is complete
     try {

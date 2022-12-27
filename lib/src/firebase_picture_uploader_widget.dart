@@ -5,9 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'firebase_picture_upload_controller.dart';
 
 /// Defines the source for image selection
@@ -440,16 +440,17 @@ class _SingleProfilePictureUploadWidgetState
 
     // manipulate image as requested
     final ImagePicker _imagePicker = ImagePicker();
-    final image = await _imagePicker.pickImage(
-        source: imageSource,
-        imageQuality: widget.pictureUploadWidget!.settings
-            .imageManipulationSettings.compressQuality);
+    // INFORMATION: Code might crash here with iOS simulator because of a known issue by Apple
+    // Anyhow, it should work with your physical iPhone
+    // See https://pub.dev/packages/image_picker
+    // See https://www.google.com/search?q=63426347+apple&sxsrf=ALeKk01YnTMid5S0PYvhL8GbgXJ40ZS[…]t=gws-wiz&ved=0ahUKEwjKh8XH_5HwAhWL_rsIHUmHDN8Q4dUDCA8&uact=5
+    final image = await _imagePicker.pickImage(source: imageSource);
     if (image == null) {
       return;
     }
 
     // crop image if requested
-    File? finalImage = File(image.path);
+    CroppedFile? finalImage = CroppedFile(image.path);
     if (widget.pictureUploadWidget!.settings.imageManipulationSettings
         .enableCropping) {
       finalImage = await widget.pictureUploadController!.cropImage(
@@ -595,7 +596,7 @@ class _SingleProfilePictureUploadWidgetState
                   fit: BoxFit.fitHeight)
               : _uploadJob.image != null
                   ? Image.file(
-                      _uploadJob.image!,
+                      File(_uploadJob.image!.path),
                       width: widget.pictureUploadWidget!.buttonStyle.width,
                       height: widget.pictureUploadWidget!.buttonStyle.height,
                       fit: BoxFit.fitHeight,
@@ -672,8 +673,8 @@ class UploadJob {
   UploadAction? action;
   int id = DateTime.now().millisecondsSinceEpoch;
   bool uploadProcessing = false;
-  File? image;
-  File? oldImage;
+  CroppedFile? image;
+  CroppedFile? oldImage;
   Reference? oldStorageReference;
   ImageProvider? imageProvider; // for existing images
 
@@ -681,9 +682,7 @@ class UploadJob {
   Reference? get storageReference => _storageReference;
   set storageReference(Reference? storageReference) {
     _storageReference = storageReference;
-    if (_storageReference != null &&
-        _storageReference!.fullPath != null &&
-        _storageReference!.fullPath != '') {
+    if (_storageReference != null && _storageReference!.fullPath != '') {
       final String fileName = _storageReference!.fullPath.split('/').last;
 
       // The filename mist be like custom1_..._custom_x_id_customy.(jpg|png|...)
